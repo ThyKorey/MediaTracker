@@ -1,24 +1,14 @@
-# Example headings
+What is MediaTracker: [Find out Here](#What-is-MediaTracker).
 
-## Sample Section
+How does it work?: [Find out Here](#How-does-MediaTracker-Work).
 
-## This'll be a _Helpful_ Section About the Greek Letter Θ!
-A heading containing characters not allowed in fragments, UTF-8 characters, two consecutive spaces between the first and second words, and formatting.
+Why was this made?: [Find out Here](#Why-was-this-program-made).
 
-## This heading is not unique in the file
+## What is MediaTracker
+MediaTracker is a Python GUI program designed to keep track of your experienced Media
 
-TEXT 1
+## How does MediaTracker work?
+First the user clicks on the New File or Load File button, then the user can enter the names of Movies, Shows, Albums, and Video Games in a field that saves the data entered in a special ".MediaTracker" file
 
-## This heading is not unique in the file
-
-TEXT 2
-
-# Links to the example headings above
-
-Link to the sample section: [Link Text](#sample-section).
-
-Link to the helpful section: [Link Text](#thisll--be-a-helpful-section-about-the-greek-letter-Θ).
-
-Link to the first non-unique section: [Link Text](#this-heading-is-not-unique-in-the-file).
-
-Link to the second non-unique section: [Link Text](#this-heading-is-not-unique-in-the-file-1).
+## Why was this program made?
+I made it for people like me who have autism and often struggle to remember if they have experienced certain media
