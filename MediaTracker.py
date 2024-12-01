@@ -26,11 +26,19 @@ class MediaTracker(tk.Tk): # Main Window Part 1: Defining characteristics
 
 class TopSoftwareWindow: # All Program Logic Here
     def __init__(self):
-        self.TopWindow = tk.Toplevel()
+        self.SoftwareWindow = tk.Toplevel()
+        self.SoftwareWindow.geometry("800x600")
+        self.SoftwareWindow.resizable(False, False)
+        self.SoftwareWindow.title("Software Window")
+        self.SoftwareWindow.iconbitmap('MediaTracker_Icon.ico') 
 
 class TopAboutWindow: # About Software area
     def __init__(self):
-        self.TopWindow = tk.Toplevel()
+        self.AboutWindow = tk.Toplevel()
+        self.AboutWindow.geometry("300x200")
+        self.AboutWindow.resizable(False, False)
+        self.AboutWindow.title("About Window")
+        self.AboutWindow.iconbitmap('MediaTracker_Icon.ico') 
 
 class MainWindowFrame(ttk.Frame): # Main Window Part 2: The interface
     def __init__(self, parent):
@@ -54,10 +62,10 @@ class MainWindowFrame(ttk.Frame): # Main Window Part 2: The interface
     def CallTopSoftwareWindow(self):
 
         self.Looper = TopSoftwareWindow()
-        self.Looper.TopWindow.mainloop()
+        self.Looper.SoftwareWindow.mainloop()
 
     def CallAboutWindow(self):
         self.Looper = TopAboutWindow()        
-        self.Looper.TopWindow.mainloop()
+        self.Looper.AboutWindow.mainloop()
 
 main()
