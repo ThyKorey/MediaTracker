@@ -4,7 +4,7 @@ from tkinter import ttk # Themed Tkinter
 from PIL import Image, ImageTk # used to import images
 
 # Variable
-File_Open_Status = False 
+File_Open_Status = False # Useless, Most likely will be removed
 
 def main():
     App = MediaTracker()
