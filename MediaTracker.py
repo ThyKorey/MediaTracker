@@ -3,28 +3,23 @@ from tkinter import filedialog as FileExplorer # Will be used for saving and loa
 from tkinter import ttk # Themed Tkinter
 from PIL import Image, ImageTk # used to import images
 
-# Variable
-File_Open_Status = False # Useless, Most likely will be removed
-
 def main():
     App = MediaTracker()
-    App.mainloop()
+    App.mainloop() # Lets the program loop so it can open and run
 
 class MediaTracker(tk.Tk): # Main Window Part 1: Defining characteristics
     def __init__(self):
+        super().__init__() # Starts the TKinter Function
 
-        # Starts the TKinter Function
-        super().__init__()
-
-        self.geometry("300x210")
-        self.resizable(False, False)
-        self.title("Media Tracker")
-        self.iconbitmap('MediaTracker_Icon.ico') 
+        self.geometry("300x210") # Size for start window
+        self.resizable(False, False) # Prevents it from being resizable 
+        self.title("Media Tracker") # Name of Program
+        self.iconbitmap('MediaTracker_Icon.ico') # Icon next to Name
 
         MainWindow = MainWindowFrame(self)
-        MainWindow.pack(fill="both", expand= True)
+        MainWindow.pack(fill="both", expand= True) # Lets us render the window
 
-class TopSoftwareWindow: # All Program Logic Here
+class TopSoftwareWindow: # Software Window area
     def __init__(self):
         self.SoftwareWindow = tk.Toplevel()
         self.SoftwareWindow.geometry("800x600")
@@ -44,22 +39,25 @@ class MainWindowFrame(ttk.Frame): # Main Window Part 2: The interface
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.image = Image.open("MediaTracker_Image.jpg")
-        self.photo = ImageTk.PhotoImage(self.image)
+        self.image = Image.open("MediaTracker_Image.jpg") # Opens the MediaTracker logo Image
+        self.photo = ImageTk.PhotoImage(self.image) # Converts the image into something tkinter can work with
 
-        self.label = tk.Label(self, image=self.photo)
+        self.label = tk.Label(self, image=self.photo) # puts the image on a empty label
 
         self.New_btn = ttk.Button(self, text="Start Software", command=self.CallTopSoftwareWindow)
         self.About_btn = ttk.Button(self, text="About Software", command=self.CallAboutWindow)
         self.Quit_btn = ttk.Button(self, text="Quit Software", command=parent.destroy)
 
-        self.label.pack()    
+        # packs them so they appear on the window
 
-        self.New_btn.pack(fill= "x")
+        self.label.pack()
+        self.New_btn.pack(fill= "x") # (fill= "x") stretches them to cover the entire window
         self.About_btn.pack(fill= "x")
         self.Quit_btn.pack(fill= "x")
 
-    def CallTopSoftwareWindow(self):
+    # Starts the loops for the Toplevel windows
+
+    def CallTopSoftwareWindow(self): 
 
         self.Looper = TopSoftwareWindow()
         self.Looper.SoftwareWindow.mainloop()
@@ -69,3 +67,4 @@ class MainWindowFrame(ttk.Frame): # Main Window Part 2: The interface
         self.Looper.AboutWindow.mainloop()
 
 main()
+
