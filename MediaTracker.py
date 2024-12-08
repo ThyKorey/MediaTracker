@@ -71,6 +71,7 @@ class TopSoftwareWindow: # Software Window area
         self.Quit_Btn = ttk.Button(self, text="Quit")
 
         # Note to self, Replace .pack with .grid more complex layout also tryout .place since windows cant be resized
+        # Note Note to self, probably just gonna keep .place cause its cleaner and easier to use than .grid honestly
         self.Entry_Field.place(x= 0, y= 0, width= 724)
 
         self.New_Entry_Btn.place(x= 725, y= 0)
