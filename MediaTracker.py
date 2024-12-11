@@ -8,6 +8,12 @@ from PIL import Image, ImageTk
 # ttk is Themed Tkinter, used to get a more modern looking button design
 # PIL (Python Imaging Library), more accurately Image and ImageTK is used to import images to use in our Tkinter window
 
+Movies = []
+TV_Shows = []
+Games = []
+Music = []
+Books = []
+Podcasts = []
 
 # Main Window Part 1: Defining characteristics
 class MediaTracker(tk.Tk): 
@@ -69,7 +75,7 @@ class MainWindowFrame(ttk.Frame):
         self.CallOnWindow = TopAboutWindow()        
 
 
-# Software Window area
+# Software Window class
 class TopSoftwareWindow(tk.Toplevel):
     def __init__(self):
         super().__init__()
@@ -80,49 +86,163 @@ class TopSoftwareWindow(tk.Toplevel):
         self.iconbitmap('MediaTracker_Icon.ico')
 
         # Everything that appears on this window
-
-        
-
         # Binding the Enter key to append the list so the user doesn't have to click new entry every time
         self.Entry_Field = ttk.Entry(self)
         self.Entry_Field.bind("<Return>", lambda event: self.addtolist())
 
         self.Text_List = tk.Listbox(self)
-        self.Category_List = tk.Listbox(self)
+        self.Text_List.bind("<Delete>", lambda event: self.removefromlist())
+
         self.New_Entry_Btn = ttk.Button(self, text="New Entry", command=self.addtolist)
         self.Remove_Entry_Btn = ttk.Button(self, text="Delete Entry", command=self.removefromlist)
+       
+        self.Category_Dropdown = ttk.Combobox(self, state="readonly", values=["Movies", "TV Shows", "Games", "Music", "Books", "Podcasts"])
+        self.Category_Dropdown.set("Movies")
+        self.Category_Dropdown.bind("<<ComboboxSelected>>", lambda event: self.CategorySelected())
+
         self.Save_File_Btn = ttk.Button(self, text="Save File")
         self.Load_File_Btn = ttk.Button(self, text="Load File")
-        self.Quit_Btn = ttk.Button(self, text="Quit")
+        self.Quit_Btn = ttk.Button(self, text="Quit", command=self.destroy)
 
         # Using .place to manually place the assets across the window as the window is unresizeable to the user
 
         self.Entry_Field.place(x= 0, y= 3, width= 720)
         
-
         self.New_Entry_Btn.place(x= 722, y= 0)
 
         self.Text_List.place(x= 0, y= 25, width= 620, height= 570)
-        self.Category_List.place(x= 621, y= 25, width= 99, height= 570)
+        self.Category_Dropdown.place(x=621, y=25, width= 99)
 
         self.Remove_Entry_Btn.place(x=722, y= 25)
 
-        self.Save_File_Btn.place(x= 722, y= 495)
-        self.Load_File_Btn.place(x= 722, y= 520)
-        self.Quit_Btn.place(x= 722, y= 570)
+        self.Save_File_Btn.place(x= 621, y= 495, width= 178)
+        self.Load_File_Btn.place(x= 621, y= 520, width= 178)
+        self.Quit_Btn.place(x= 621, y= 570, width= 178)
 
     def addtolist(self):
+        global Movies
+        global TV_Shows
+        global Games
+        global Music
+        global Books
+        global Podcasts
+        
         text = self.Entry_Field.get()
+
         if text:
+            Cate_Selection = self.Category_Dropdown.get()
+            if Cate_Selection == "Movies":
+                Movies.append(text)
+            elif Cate_Selection == "TV Shows":
+                TV_Shows.append(text)
+            elif Cate_Selection == "Games":
+                Games.append(text)
+            elif Cate_Selection == "Music":
+                Music.append(text)
+            elif Cate_Selection == "Books":
+                Music.append(text)
+            elif Cate_Selection == "Podcasts":
+                Podcasts.append(text)
+
             self.Text_List.insert(tk.END, text)
             self.Entry_Field.delete(0, tk.END)
 
     def removefromlist(self):
-        selection = self.Text_List.curselection()
-        self.Text_List.delete(selection)
+        global Movies
+        global TV_Shows
+        global Games
+        global Music
+        global Books
+        global Podcasts
+
+        Selection = self.Text_List.curselection()
+        Cate_Selected = self.Category_Dropdown.get()
+
+        if Cate_Selected == "Movies":
+            for i in range(len(Movies)):
+                if Selection == Movies[i]:
+                    Movies.pop(i)
+                    break
+
+        elif Cate_Selected == "TV Shows":
+            for i in range(len(TV_Shows)):
+                if Selection == TV_Shows[i]:
+                    TV_Shows.pop(i)
+                    break
+
+        elif Cate_Selected == "Games":
+            for i in range(len(Games)):
+                if Selection == Games[i]:
+                    Games.pop(i)
+                    break
+
+        elif Cate_Selected == "Music":
+            for i in range(len(Music)):
+                if Selection == Music[i]:
+                    Music.pop(i)
+                    break
+
+        elif Cate_Selected == "Books":
+            for i in range(len(Books)):
+                if Selection == Books[i]:
+                    Books.pop(i)
+                    break
+
+        elif Cate_Selected == "Podcasts":
+            for i in range(len(Podcasts)):
+                if Selection == Podcasts[i]:
+                    Podcasts.pop(i)
+                    break
+
+        self.Text_List.delete(Selection)
+
+    def CategorySelected(self):
+        global Movies
+        global TV_Shows
+        global Games
+        global Music
+        global Books
+        global Podcasts
+
+        Cate_Selection = self.Category_Dropdown.get()
+        if Cate_Selection == "Movies":
+            Movies.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(Movies)):
+                self.Text_List.insert(tk.END, Movies[i])
+
+        elif Cate_Selection == "TV Shows":
+            TV_Shows.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(TV_Shows)):
+                self.Text_List.insert(tk.END, TV_Shows[i])
+
+        elif Cate_Selection == "Games":
+            Games.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(Games)):
+                self.Text_List.insert(tk.END, Games[i])
+
+        elif Cate_Selection == "Music":
+            Music.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(Music)):
+                self.Text_List.insert(tk.END, Music[i])
+        
+        elif Cate_Selection == "Books":
+            Books.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(Books)):
+                self.Text_List.insert(tk.END, Books[i])
+        
+        elif Cate_Selection == "Podcasts":
+            Podcasts.sort()
+            self.Text_List.delete(0, tk.END)
+            for i in range(len(Podcasts)):
+                self.Text_List.insert(tk.END, Podcasts[i])
 
 
-# About Software area
+# About Software class
 class TopAboutWindow(tk.Toplevel): 
     def __init__(self):
         super().__init__()
@@ -133,7 +253,7 @@ class TopAboutWindow(tk.Toplevel):
         self.iconbitmap('MediaTracker_Icon.ico')
 
         # Opens the MediaTracker logo Image
-        self.image = Image.open("MediaTracker_Image.jpg") 
+        self.image = Image.open("MediaTracker_Image_Vertical.jpg") 
 
         # Converts the image into something tkinter can work with
         self.photo = ImageTk.PhotoImage(self.image)
