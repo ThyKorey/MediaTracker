@@ -113,6 +113,3 @@ def main():
     App.mainloop() # Lets the program loop so it can open and run
 
 main()
-
-main()
-
