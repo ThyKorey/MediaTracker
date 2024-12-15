@@ -1,12 +1,20 @@
 import tkinter as tk 
 from tkinter import filedialog 
+from tkinter import messagebox
 from tkinter import ttk 
 from PIL import Image, ImageTk 
+import csv
 
 # tkinter (tk abbreviated to save textspace) is python's builtin GUI handler
 # filedialog will be used for saving and loading 
 # ttk is Themed Tkinter, used to get a more modern looking button design
 # PIL (Python Imaging Library), more accurately Image and ImageTK is used to import images to use in our Tkinter window
+# csv is used to save and load, although this program as it stands has limited loading functionality
+
+# I genuinely enjoyed writing this project
+# I would like to also say that even tho I got stumped on how to load files
+# I would not consider this a failure as I succeeded in EVERYTHING but loading files
+# I hope you have a great day, anyway enjoy looking through this!
 
 Movies = []
 TV_Shows = []
@@ -15,7 +23,7 @@ Music = []
 Books = []
 Podcasts = []
 
-# Main Window Part 1: Defining characteristics
+# Main Window Part 1: Configuration
 class MediaTracker(tk.Tk): 
     def __init__(self):
 
@@ -38,7 +46,7 @@ class MediaTracker(tk.Tk):
         MainWindow = MainWindowFrame(self)
         MainWindow.pack(fill="both", expand= True)
         
-# Main Window Part 2: The interface
+# Main Window Part 2: Interface
 class MainWindowFrame(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -74,8 +82,7 @@ class MainWindowFrame(ttk.Frame):
 
         self.CallOnWindow = TopAboutWindow()        
 
-
-# Software Window class
+# Top Window Part 1: Software Window class
 class TopSoftwareWindow(tk.Toplevel):
     def __init__(self):
         super().__init__()
@@ -90,18 +97,18 @@ class TopSoftwareWindow(tk.Toplevel):
         self.Entry_Field = ttk.Entry(self)
         self.Entry_Field.bind("<Return>", lambda event: self.addtolist())
 
-        self.Text_List = tk.Listbox(self)
+        self.Text_List = tk.Listbox(self, font=("Segoe UI", 12))
         self.Text_List.bind("<Delete>", lambda event: self.removefromlist())
 
         self.New_Entry_Btn = ttk.Button(self, text="New Entry", command=self.addtolist)
         self.Remove_Entry_Btn = ttk.Button(self, text="Delete Entry", command=self.removefromlist)
        
         self.Category_Dropdown = ttk.Combobox(self, state="readonly", values=["Movies", "TV Shows", "Games", "Music", "Books", "Podcasts"])
-        self.Category_Dropdown.set("Movies")
+        self.Category_Dropdown.set("Select Category")
         self.Category_Dropdown.bind("<<ComboboxSelected>>", lambda event: self.CategorySelected())
 
-        self.Save_File_Btn = ttk.Button(self, text="Save File")
-        self.Load_File_Btn = ttk.Button(self, text="Load File")
+        self.Save_File_Btn = ttk.Button(self, text="Save File", command=self.SaveToFile)
+        self.Load_File_Btn = ttk.Button(self, text="Load File", command=self.LoadFromFile)
         self.Quit_Btn = ttk.Button(self, text="Quit", command=self.destroy)
 
         # Using .place to manually place the assets across the window as the window is unresizeable to the user
@@ -109,11 +116,10 @@ class TopSoftwareWindow(tk.Toplevel):
         self.Entry_Field.place(x= 0, y= 3, width= 720)
         
         self.New_Entry_Btn.place(x= 722, y= 0)
+        self.Remove_Entry_Btn.place(x=722, y= 25)
 
         self.Text_List.place(x= 0, y= 25, width= 620, height= 570)
         self.Category_Dropdown.place(x=621, y=25, width= 99)
-
-        self.Remove_Entry_Btn.place(x=722, y= 25)
 
         self.Save_File_Btn.place(x= 621, y= 495, width= 178)
         self.Load_File_Btn.place(x= 621, y= 520, width= 178)
@@ -128,24 +134,41 @@ class TopSoftwareWindow(tk.Toplevel):
         global Podcasts
         
         text = self.Entry_Field.get()
-
+        
         if text:
             Cate_Selection = self.Category_Dropdown.get()
-            if Cate_Selection == "Movies":
+            if Cate_Selection == "Select Category":
+                messagebox.showinfo("Info", "Please Select a Category!")
+
+            elif Cate_Selection == "Movies":
                 Movies.append(text)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
+
             elif Cate_Selection == "TV Shows":
                 TV_Shows.append(text)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
+
             elif Cate_Selection == "Games":
                 Games.append(text)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
+
             elif Cate_Selection == "Music":
                 Music.append(text)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
+
             elif Cate_Selection == "Books":
                 Music.append(text)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
+
             elif Cate_Selection == "Podcasts":
                 Podcasts.append(text)
-
-            self.Text_List.insert(tk.END, text)
-            self.Entry_Field.delete(0, tk.END)
+                self.Text_List.insert(tk.END, text)
+                self.Entry_Field.delete(0, tk.END)
 
     def removefromlist(self):
         global Movies
@@ -158,40 +181,44 @@ class TopSoftwareWindow(tk.Toplevel):
         Selection = self.Text_List.curselection()
         Cate_Selected = self.Category_Dropdown.get()
 
-        if Cate_Selected == "Movies":
+        if Cate_Selected == "Select Category":
+            if Selection:
+                messagebox.showinfo("Info", "Please Select a Category!")
+
+        elif Cate_Selected == "Movies":
             for i in range(len(Movies)):
                 if Selection == Movies[i]:
-                    Movies.pop(i)
+                    del Movies[i]
                     break
 
         elif Cate_Selected == "TV Shows":
             for i in range(len(TV_Shows)):
                 if Selection == TV_Shows[i]:
-                    TV_Shows.pop(i)
+                    del TV_Shows[i]
                     break
 
         elif Cate_Selected == "Games":
             for i in range(len(Games)):
                 if Selection == Games[i]:
-                    Games.pop(i)
+                    del Games[i]
                     break
 
         elif Cate_Selected == "Music":
             for i in range(len(Music)):
                 if Selection == Music[i]:
-                    Music.pop(i)
+                    del Music[i]
                     break
 
         elif Cate_Selected == "Books":
             for i in range(len(Books)):
                 if Selection == Books[i]:
-                    Books.pop(i)
+                    del Books[i]
                     break
 
         elif Cate_Selected == "Podcasts":
             for i in range(len(Podcasts)):
                 if Selection == Podcasts[i]:
-                    Podcasts.pop(i)
+                    del Podcasts[i]
                     break
 
         self.Text_List.delete(Selection)
@@ -241,8 +268,63 @@ class TopSoftwareWindow(tk.Toplevel):
             for i in range(len(Podcasts)):
                 self.Text_List.insert(tk.END, Podcasts[i])
 
+    def SaveToFile(self):
+        file_path = filedialog.asksaveasfile(defaultextension=".csv", filetypes=[("CSV Files", "*.csv")])
+        if file_path:
+            with open(file_path, 'w', newline='') as SaveFile:
+                writer = csv.writer(SaveFile)
+                writer.writerow(Movies)
+                writer.writerow(TV_Shows)
+                writer.writerow(Games)
+                writer.writerow(Music)
+                writer.writerow(Books)
+                writer.writerow(Podcasts)
+                
+    def LoadFromFile(self):
+        file_path = filedialog.askopenfilename(defaultextension=".csv", filetypes=[("CSV Files", "*.csv")])
+        if file_path:
 
-# About Software class
+            # This is where I struggled the most, I could not figure out how to load the data properly
+            # I genuinely could not figure this out and google was NOT being helpful, I can load all of this data into 1 of the arrays
+            # If you could inform me on what I was doing wrong here that would BE AMAZING but as it stands im stumped. Ill leave more detail in the honest assessment
+
+            Movies.clear()
+            TV_Shows.clear()
+            Games.clear()
+            Music.clear()
+            Books.clear()
+            Podcasts.clear()
+
+            with open(file_path, 'r', newline='') as LoadFile:
+                loader = csv.reader(LoadFile)
+
+                count = 0
+
+                for line in loader: 
+                    
+                    CurrentWordData = line
+
+                    for i in range(len(CurrentWordData)):
+
+                        if count == 0:
+                            Movies.append(CurrentWordData[i])
+
+                        elif count == 1:
+                            TV_Shows.append(CurrentWordData[i])
+
+                        elif count == 2:
+                            Games.append(CurrentWordData[i])
+
+                        elif count == 3:
+                            Music.append(CurrentWordData[i])
+
+                        elif count == 4:
+                            Books.append(CurrentWordData[i])
+
+                        elif count == 5:
+                            Podcasts.append(CurrentWordData[i])
+
+# Top Window Part 2: About Software class
 class TopAboutWindow(tk.Toplevel): 
     def __init__(self):
         super().__init__()
@@ -272,8 +354,7 @@ class TopAboutWindow(tk.Toplevel):
 
         self.label1.pack(side="top")
 
-
-
+# Looper!!!!!
 def main():
     App = MediaTracker()
     # Lets the program loop so it can open and run
