@@ -13,7 +13,7 @@ import csv
 
 # I genuinely enjoyed writing this project
 # I would like to also say that even tho I got stumped on how to load files
-# I would not consider this a failure as I succeeded in EVERYTHING but loading files
+# I would not consider this a failure as I succeeded in EVERYTHING but saving and loading files
 # I hope you have a great day, anyway enjoy looking through this!
 
 Movies = []
